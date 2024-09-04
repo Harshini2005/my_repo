@@ -1,6 +1,11 @@
 from flask import Flask, request, jsonify
 import boto3
 from botocore.exceptions import NoCredentialsError
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 
@@ -14,13 +19,13 @@ def upload_to_s3(file, bucket):
     """
     # Use a fixed object name
     object_name = 'myusericon.jpg'
-    region = 'ap-south-1'  # Set the region your bucket is in
-    
-    # Create S3 client
+    region = os.getenv('AWS_REGION')  # Get the region from the environment
+
+    # Create S3 client using credentials from environment variables
     s3_client = boto3.client(
         's3',
-        aws_access_key_id='AKIASLJBUH4GGOD5KA6Z',  # Replace with your AWS access key ID
-        aws_secret_access_key='oV4poc/yJANErtQkudexJvrEKRGfl+B/F6Ka9aBO',  # Replace with your AWS secret access key
+        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),  # Fetch from environment
+        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),  # Fetch from environment
         region_name=region
     )
     
